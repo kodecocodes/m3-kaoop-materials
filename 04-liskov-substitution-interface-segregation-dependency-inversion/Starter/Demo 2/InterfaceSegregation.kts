@@ -1,32 +1,31 @@
-
 class Customer(val name: String) {
-    // Customer details
+  // Customer details
 }
 
 // Initial design with a single interface
 interface UserInterface {
-    fun viewProducts()
-    fun addToCart(product: Product)
-    fun viewCart()
-    fun managePaymentSettings()
+  fun viewProducts()
+  fun addToCart(product: Product)
+  fun viewCart()
+  fun managePaymentSettings()
 }
 
 class ParentAccount : UserInterface {
-    override fun viewProducts() {
-        println("Parent account viewing products...")
-    }
+  override fun viewProducts() {
+    println("Parent account viewing products...")
+  }
 
-    override fun addToCart(product: Product) {
-        println("Product added to the cart (Parent): ${product.name}")
-    }
+  override fun addToCart(product: Product) {
+    println("Product added to the cart (Parent): ${product.name}")
+  }
 
-    override fun viewCart() {
-        println("Parent account viewing cart...")
-    }
+  override fun viewCart() {
+    println("Parent account viewing cart...")
+  }
 
-    override fun managePaymentSettings() {
-        println("Parent account managePaymentSettings...")
-    }
+  override fun managePaymentSettings() {
+    println("Parent account managePaymentSettings...")
+  }
 }
 
 // TODO:
@@ -35,96 +34,98 @@ class ParentAccount : UserInterface {
 // To adhere to the Interface Segregation Principle, we can create separate interfaces for
 // parent accounts and kids' accounts
 class KidsAccount : UserInterface {
-    override fun viewProducts() {
-        println("Kids account viewing products...")
-    }
+  override fun viewProducts() {
+    println("Kids account viewing products...")
+  }
 
-    override fun addToCart(product: Product) {
-        println("Product added to the cart (Kids): ${product.name}")
-    }
+  override fun addToCart(product: Product) {
+    println("Product added to the cart (Kids): ${product.name}")
+  }
 
-    override fun viewCart() {
-        println("Kids account viewing cart...")
-    }
+  override fun viewCart() {
+    println("Kids account viewing cart...")
+  }
 
-    override fun managePaymentSettings() {
-        println("Kids account managePaymentSettings...")
-    }
+  override fun managePaymentSettings() {
+    println("Kids account managePaymentSettings...")
+  }
 }
 
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getLineItemPrice(): Double {
-        return product.price * quantity
-    }
-    fun show (){
-        println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
-    }
+  fun getLineItemPrice(): Double {
+    return product.price * quantity
+  }
+
+  fun show() {
+    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
+  }
 }
 
 // The private constructor prevents unauthorized instantiation of the class
 class ShoppingCart private constructor() {
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    // Companion object to hold the singleton instance
-    companion object {
-        // Keyword to make sure multiple threads read the most updated value of it
-        @Volatile
-        private var instance: ShoppingCart? = null
+  // Companion object to hold the singleton instance
+  companion object {
+    // Keyword to make sure multiple threads read the most updated value of it
+    @Volatile
+    private var instance: ShoppingCart? = null
 
-        // Function to get the singleton instance in thread safe way
-        fun getInstance(): ShoppingCart {
-            // Check that instance is initialized (without obtaining the lock, which is expensive).
-            // If it is initialized, return it immediately.
-            if (instance == null) {
-                // If no initialized, obtain the lock.
-                synchronized(this) {
-                    // We need to double-check if the instance has already been initialized again, since
-                    // if another thread acquired the lock first, it may have already done the initialization.
-                    if (instance == null) {
-                        // Initialize the instance
-                        instance = ShoppingCart()
-                    }
-                }
-            }
-            return instance as ShoppingCart
+    // Function to get the singleton instance in thread safe way
+    fun getInstance(): ShoppingCart {
+      // Check that instance is initialized (without obtaining the lock, which is expensive).
+      // If it is initialized, return it immediately.
+      if (instance == null) {
+        // If no initialized, obtain the lock.
+        synchronized(this) {
+          // We need to double-check if the instance has already been initialized again, since
+          // if another thread acquired the lock first, it may have already done the initialization.
+          if (instance == null) {
+            // Initialize the instance
+            instance = ShoppingCart()
+          }
         }
+      }
+      return instance as ShoppingCart
     }
+  }
 
-    fun addLineItem (orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
-    fun getTotalOrderPrice(): Double {
-        return orderItems.sumOf { it.getLineItemPrice() }
-    }
+  fun addLineItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun show() {
-        println()
-        println("Here are the details of the order:")
-        println("Total Price: $${getTotalOrderPrice()}")
-        println("Number of Line Items: ${orderItems.size}")
-        orderItems.forEach {orderItem: OrderItem ->
-            orderItem.show()
-        }
+  fun getTotalOrderPrice(): Double {
+    return orderItems.sumOf { it.getLineItemPrice() }
+  }
+
+  fun show() {
+    println()
+    println("Here are the details of the order:")
+    println("Total Price: $${getTotalOrderPrice()}")
+    println("Number of Line Items: ${orderItems.size}")
+    orderItems.forEach { orderItem: OrderItem ->
+      orderItem.show()
     }
+  }
 }
 
 
 fun main() {
-    // Create a customer for which we will create orders
-    val customer = Customer("Elon Musk")
+  // Create a customer for which we will create orders
+  val customer = Customer("Elon Musk")
 
-    // Create two products
-    val product1 = Product("Laptop", 1200.0)
-    val product2 = Product("Smartphone", 800.0)
+  // Create two products
+  val product1 = Product("Laptop", 1200.0)
+  val product2 = Product("Smartphone", 800.0)
 
-    // Create a shopping cart to add items
-    val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-    // Add new order items using with the products and quantity,
-    shoppingCart.addLineItem(OrderItem(product1, 2))
-    // Show order details. It will show order items.
-    shoppingCart.show()
+  // Create a shopping cart to add items
+  val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
+  // Add new order items using with the products and quantity,
+  shoppingCart.addLineItem(OrderItem(product1, 2))
+  // Show order details. It will show order items.
+  shoppingCart.show()
 }

@@ -85,7 +85,7 @@ fun main() {
   var shoppingCart: ShoppingCart? = ShoppingCart()
   println("Created an instance of cart...")
 
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart?.addLineItem(OrderItem(product1, 2))
   shoppingCart?.addLineItem(OrderItem(product2, 1))
 

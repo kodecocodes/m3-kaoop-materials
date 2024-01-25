@@ -72,7 +72,7 @@ class ShoppingCart private constructor() {
       if (instance == null) {
         // If no initialized, obtain the lock.
         synchronized(this) {
-          // We need to double-check if the instance has already been initialized again, since
+          // You need to double-check if the instance has already been initialized again, since
           // if another thread acquired the lock first, it may have already done the initialization.
           if (instance == null) {
             // Initialize the instance
@@ -105,7 +105,7 @@ class ShoppingCart private constructor() {
 
 // TODO: Fix the violation
 // The CheckoutService is tightly coupled to a specific payment gateway (StripePaymentGateway).
-// Adding a new payment gateway (e.g., Paypal) would require modifying the CheckoutService class,
+// Adding a new payment gateway (e.g. Paypal) would require modifying the CheckoutService class,
 // violating the Open-Closed Principle.
 // Modifying the existing code introduces the risk of breaking existing functionality and tests.
 class CheckoutService {
@@ -132,7 +132,7 @@ class StripePaymentGateway {
 }
 
 fun main() {
-  // Create a customer for which we will create orders
+  // Create a customer for which you will create orders
   val customer = Customer("Elon Musk")
 
   // Create two products
@@ -141,7 +141,7 @@ fun main() {
 
   // Create a shopping cart to add items
   val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart.addLineItem(OrderItem(product1, 2))
   // Show order details. It will show order items.
   shoppingCart.show()

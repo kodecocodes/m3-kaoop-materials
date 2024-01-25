@@ -72,7 +72,7 @@ class ShoppingCart private constructor() {
       if (instance == null) {
         // If no initialized, obtain the lock.
         synchronized(this) {
-          // We need to double-check if the instance has already been initialized again, since
+          // You need to double-check if the instance has already been initialized again, since
           // if another thread acquired the lock first, it may have already done the initialization.
           if (instance == null) {
             // Initialize the instance
@@ -105,7 +105,7 @@ class ShoppingCart private constructor() {
 
 // TODO:
 // Without adhering to Liskov Substitution Principle
-// We have a generic payment gateway, and want to introduce specific logic for crypto payment gateways
+// You have a generic payment gateway, and want to introduce specific logic for crypto payment gateways
 open class GenericPaymentGateway {
   open fun processPayment(customer: Customer, shoppingCart: ShoppingCart): Boolean {
     // Logic to process a generic payment
@@ -115,7 +115,7 @@ open class GenericPaymentGateway {
   }
 }
 
-// TODO: Make it adhere to LSV
+// TODO: Make it adhere to LSP
 
 // To introduce specific logic for crypto payment gateways.
 // This breaks LSP
@@ -125,9 +125,9 @@ open class GenericPaymentGateway {
 // to use the subclass wherever the base class is expected, and the program
 // should continue to work as expected.
 
-// However we won't be able to replace in this situation, as it would break the logic,
-// since we are modifying the logic of generic payment processing. The calling code using the base class
-// might not anticipate them. There can be situations where calling code expects a payment to succeed based on the base class's logic,
+// However you won't be able to replace in this situation, as it would break the logic,
+// since you're modifying the logic of generic payment processing. The calling code using the base class
+// might not anticipate them. There can be situations where calling code expects a payment to succeed based on the base class logic,
 // but it fails when using CryptoPaymentGateway.
 class CryptoPaymentGateway : GenericPaymentGateway() {
   override fun processPayment(customer: Customer, shoppingCart: ShoppingCart): Boolean {
@@ -141,7 +141,7 @@ class CryptoPaymentGateway : GenericPaymentGateway() {
 }
 
 fun main() {
-  // Create a customer for which we will create orders
+  // Create a customer for which you will create orders
   val customer = Customer("Elon Musk")
 
   // Create two products
@@ -150,13 +150,12 @@ fun main() {
 
   // Create a shopping cart to add items
   val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart.addLineItem(OrderItem(product1, 2))
   // Show order details. It will show order items.
   shoppingCart.show()
 
-  // TODO:
-  //  Can we replace subclass where base class is expected?
+  // TODO: Can you replace subclass where base class is expected?
   val cryptoPaymentGateway = CryptoPaymentGateway()
   val paymentResult1 = cryptoPaymentGateway.processPayment(customer, shoppingCart)
   println("Payment result: $paymentResult1")

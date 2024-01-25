@@ -80,10 +80,10 @@ class ShoppingCart(private val customer: Customer) {
 }
 
 fun main() {
-  // Create a customer for which we will create orders. Later attach it to the Shopping Cart.
+  // Create a customer for which you will create orders. Later attach it to the Shopping Cart.
   // Aggregation:
-  // Take note that this will exist even after order is deleted, i.e outside the lifetime of the order.
-  // However this an Order will be attached to a customer.
+  // Take note that this will exist even after order is deleted, i.e. outside the lifetime of the order.
+  // However, this an Order will be attached to a customer.
   val customer = Customer("Elon Musk")
 
   // Create two products
@@ -95,7 +95,7 @@ fun main() {
   println("Created an order for customer: ${customer.name}")
 
   println("Adding items to order")
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart?.addLineItem(OrderItem(product1, 2))
   shoppingCart?.addLineItem(OrderItem(product2, 1))
 
@@ -103,13 +103,12 @@ fun main() {
   shoppingCart?.show()
   println("Number of Line Items: ${shoppingCart?.orderItems?.size}")
 
-
   // Delete order
-  println("\nCancelling Order ...")
-  // Setting Order object ot null, which will be garbage collected and removed from memory
+  println("\nCanceling Order ...")
+  // Setting Order object to null, which will be garbage collected and removed from memory
   shoppingCart = null
 
-  // Show order details with OrderItem's
+  // Show order details with OrderItems
   println("\nCustomer exist: ${customer.name}")
   println("Number of Line Items: ${if (shoppingCart?.orderItems?.size != null) shoppingCart.orderItems.size else 0}")
   println("Does order exist?: ${if (shoppingCart != null) "Yes" else "No"}")

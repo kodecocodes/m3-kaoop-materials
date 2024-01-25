@@ -65,7 +65,7 @@ class Order {
   }
 
   fun cancel() {
-    println("Cancelling Order ...")
+    println("Canceling Order ...")
     // TODO: Implement Cancel Order
   }
 
@@ -87,16 +87,16 @@ fun main() {
 
   // TODO: Create new order
 
-  // TODO: Add new order items using with the products and quantity,
+  // TODO: Add new order items with products and quantity
 
   // TODO: Show order details. It will show order items.
 
   // TODO: Delete order
 
-  // TODO: Show order details with OrderItem's Agian
-  // You will notice if there is no order in place, the line items don't exist
+  // TODO: Show order details with OrderItems
+  // You will notice the line items don't exist if there is no order in place
   // Composition:
-  // OrderItems don't exists outside order object
+  // OrderItems don't exist outside order object
   // Use composition when parts have no meaningful existence outside the whole
   // and their lifecycles are closely intertwined.
 

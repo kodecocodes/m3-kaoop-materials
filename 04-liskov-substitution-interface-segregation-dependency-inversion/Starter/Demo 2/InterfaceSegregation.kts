@@ -69,9 +69,9 @@ class ParentAccount : UserInterface {
 
 // TODO:
 // Here both ParentAccount and KidsAccount are forced to implement the managePaymentSettings method
-// even though managing products might not be relevant for kids' accounts, breaking the principle.
-// To adhere to the Interface Segregation Principle, we can create separate interfaces for
-// parent accounts and kids' accounts
+// even though managing products might not be relevant for kids accounts, breaking the principle.
+// To adhere to the Interface Segregation Principle, you can create separate interfaces for
+// parent accounts and kids accounts.
 class KidsAccount : UserInterface {
   override fun viewProducts() {
     println("Kids account viewing products...")
@@ -121,7 +121,7 @@ class ShoppingCart private constructor() {
       if (instance == null) {
         // If no initialized, obtain the lock.
         synchronized(this) {
-          // We need to double-check if the instance has already been initialized again, since
+          // You need to double-check if the instance has already been initialized again, since
           // if another thread acquired the lock first, it may have already done the initialization.
           if (instance == null) {
             // Initialize the instance
@@ -154,7 +154,7 @@ class ShoppingCart private constructor() {
 
 
 fun main() {
-  // Create a customer for which we will create orders
+  // Create a customer for which you will create orders
   val customer = Customer("Elon Musk")
 
   // Create two products
@@ -163,7 +163,7 @@ fun main() {
 
   // Create a shopping cart to add items
   val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart.addLineItem(OrderItem(product1, 2))
   // Show order details. It will show order items.
   shoppingCart.show()

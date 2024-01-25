@@ -65,7 +65,7 @@ class Order {
   }
 
   fun cancel() {
-    println("Cancelling Order ...")
+    println("Canceling Order ...")
     orderItems.clear()
   }
 
@@ -88,7 +88,7 @@ fun main() {
   // Create new order
   val order = Order()
 
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   order.addLineItem(OrderItem(product1, 2))
   order.addLineItem(OrderItem(product2, 1))
 
@@ -98,10 +98,10 @@ fun main() {
   // Delete order
   order.cancel()
 
-  // Show order details with OrderItem's
-  // You will notice if there is no order in place, the line items don't exist
+  // Show order details with OrderItems
+  // You will notice the line items don't exist if there is no order in place
   // Composition:
-  // OrderItems don't exists outside order object
+  // OrderItems don't exist outside order object
   // Use composition when parts have no meaningful existence outside the whole
   // and their lifecycles are closely intertwined.
   order.show()

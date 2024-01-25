@@ -72,7 +72,7 @@ class ShoppingCart private constructor() {
       if (instance == null) {
         // If no initialized, obtain the lock.
         synchronized(this) {
-          // We need to double-check if the instance has already been initialized again, since
+          // You need to double-check if the instance has already been initialized again, since
           // if another thread acquired the lock first, it may have already done the initialization.
           if (instance == null) {
             // Initialize the instance
@@ -126,7 +126,7 @@ class DatabaseService {
 }
 
 fun main() {
-  // Create a customer for which we will create orders
+  // Create a customer for which you will create orders
   val customer = Customer("Elon Musk")
 
   // Create two products
@@ -135,7 +135,7 @@ fun main() {
 
   // Create a shopping cart to add items
   val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart.addLineItem(OrderItem(product1, 2))
   // Show order details. It will show order items.
   shoppingCart.show()

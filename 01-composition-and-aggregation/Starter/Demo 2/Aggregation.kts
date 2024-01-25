@@ -37,6 +37,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
+// TODO: Create Customer Class
+
 class Product(val name: String, val price: Double) {
   // Product details
 }
@@ -65,7 +67,7 @@ class ShoppingCart {
   }
 
   fun cancel() {
-    println("Cancelling Order ...")
+    println("Canceling Order ...")
     orderItems.clear()
   }
 
@@ -80,8 +82,6 @@ class ShoppingCart {
   }
 }
 
-// TODO: Create Customer Class
-
 fun main() {
   // TODO: Create customer object and link with the order
 
@@ -92,7 +92,7 @@ fun main() {
   // Create new order
   val shoppingCart = ShoppingCart()
 
-  // Add new order items using with the products and quantity,
+  // Add new order items with products and quantity
   shoppingCart.addLineItem(OrderItem(product1, 2))
   shoppingCart.addLineItem(OrderItem(product2, 1))
 
@@ -102,6 +102,6 @@ fun main() {
   // Delete order
   shoppingCart.cancel()
 
-  // Show order details with OrderItem's
+  // Show order details with OrderItems
   shoppingCart.show()
 }

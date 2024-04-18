@@ -36,68 +36,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
-class Product(val name: String, val price: Double) {
-  // Product details
+ 
+ class Product(val name: String, val price: Double) {
+    // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-  fun getLineItemPrice(): Double {
-    return product.price * quantity
-  }
+    fun getTotalItemCost(): Double {
+        return product.price * quantity
+    }
 
-  fun show() {
-    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
-  }
+    fun getQuantity(): Int {
+        return quantity
+    }
 }
 
-class Order {
-  // The order items live and die with the Order class.
-  // Example of Composition
-  private val orderItems: MutableList<OrderItem> = mutableListOf()
+class Order() {
+    // The order items live and die with the Order class.
+    // Example of Composition
+    private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-  fun addLineItem(orderItem: OrderItem) {
-    // TODO: Implement Add Items
-  }
-
-  private fun getTotalOrderPrice(): Double {
-    return orderItems.sumOf { it.getLineItemPrice() }
-  }
-
-  fun cancel() {
-    println("Canceling Order ...")
-    // TODO: Implement Cancel Order
-  }
-
-  fun show() {
-    println()
-    println("Here are the details of the order:")
-    println("Total Price: $${getTotalOrderPrice()}")
-    println("Number of Line Items: ${orderItems.size}")
-    orderItems.forEach { orderItem: OrderItem ->
-      orderItem.show()
+    fun addOrderItem(orderItem: OrderItem) {
+        orderItems.add(orderItem)
     }
-  }
+
+    fun getTotalCost(): Double {
+        return orderItems.sumOf { it.getTotalItemCost() }
+    }
+
+    fun getTotalNumberOfItems(): Int {
+        return orderItems.sumOf { it.getQuantity() }
+    }
 }
 
 fun main() {
-  // Create two products
-  val product1 = Product("Laptop", 1200.0)
-  val product2 = Product("Smartphone", 800.0)
+    val orders = mutableListOf<Order>()
 
-  // TODO: Create new order
+    // Create two products
+    val helmet = Product("Helmet", 1200.0)
+    val skatingShoe = Product("Smartphone", 800.0)
+    val ankleProtector = Product("AnkleProtector", 55.0)
 
-  // TODO: Add new order items with products and quantity
+    // Existing order containing two order items
+    val order1 = Order()
+    order1.addOrderItem(OrderItem(helmet, 1))
+    order1.addOrderItem(OrderItem(skatingShoe, 2))
+    orders.add(order1)
 
-  // TODO: Show order details. It will show order items.
+    // TODO: Create new order, add ankleProtector order item and add the order item to your total list of orders
 
-  // TODO: Delete order
+    // TODO: Terminate order2
 
-  // TODO: Show order details with OrderItems
-  // You will notice the line items don't exist if there is no order in place
-  // Composition:
-  // OrderItems don't exist outside order object
-  // Use composition when parts have no meaningful existence outside the whole
-  // and their lifecycles are closely intertwined.
-
+    println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

@@ -37,80 +37,90 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class Customer(val name: String) {
-  // Customer details
-}
-
 class Product(val name: String, val price: Double) {
-  // Product details
+    // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-  fun getLineItemPrice(): Double {
-    return product.price * quantity
-  }
+    fun getTotalItemCost(): Double {
+        return product.price * quantity
+    }
 
-  fun show() {
-    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
-  }
+    fun getQuantity(): Int {
+        return quantity
+    }
 }
 
-class ShoppingCart(private val customer: Customer) {
-  // The order items live and die with the Order class.
-  // Example of Composition
-  val orderItems: MutableList<OrderItem> = mutableListOf()
+class ShoppingCart {
+    // The order items live and die with the Order class.
+    // Example of Composition
+    private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-  fun addLineItem(orderItem: OrderItem) {
-    orderItems.add(orderItem)
-  }
-
-  private fun getTotalOrderPrice(): Double {
-    return orderItems.sumOf { it.getLineItemPrice() }
-  }
-
-  fun show() {
-    println()
-    println("Here are the details of the order:")
-    println("Total Price: $${getTotalOrderPrice()}")
-    println("Number of Line Items: ${orderItems.size}")
-    orderItems.forEach { orderItem: OrderItem ->
-      orderItem.show()
+    fun addOrderItem(orderItem: OrderItem) {
+        orderItems.add(orderItem)
     }
-  }
+
+    fun getOrderItems(): MutableList<OrderItem> {
+        return orderItems
+    }
+
+    fun clearItems() {
+        orderItems.clear()
+    }
+}
+
+class Order {
+    // The order items live and die with the Order class.
+    // Example of Composition
+    private val orderItems: MutableList<OrderItem> = mutableListOf()
+
+    fun addOrderItem(orderItem: OrderItem) {
+        orderItems.add(orderItem)
+    }
+
+    fun addOrderItem(items: MutableList<OrderItem>) {
+        orderItems.addAll(items)
+    }
+
+    fun getTotalCost(): Double {
+        return orderItems.sumOf { it.getTotalItemCost() }
+    }
+
+    fun getTotalNumberOfItems(): Int {
+        return orderItems.sumOf { it.getQuantity() }
+    }
 }
 
 fun main() {
-  // Create a customer for which you will create orders. Later attach it to the Shopping Cart.
-  // Aggregation:
-  // Take note that this will exist even after order is deleted, i.e. outside the lifetime of the order.
-  // However, this an Order will be attached to a customer.
-  val customer = Customer("Elon Musk")
+    val orders = mutableListOf<Order>()
 
-  // Create two products
-  val product1 = Product("Laptop", 1200.0)
-  val product2 = Product("Smartphone", 800.0)
+    // Create two products
+    val helmet = Product("Helmet", 1200.0)
+    val skatingShoe = Product("Smartphone", 800.0)
+    val ankleProtector = Product("AnkleProtector", 55.0)
+    val skatingGloves = Product("SkatingGloves", 12.0)
 
-  // Create new cart
-  var shoppingCart: ShoppingCart? = ShoppingCart(customer)
-  println("Created an order for customer: ${customer.name}")
+    // Existing orders containing three order items
+    val order1 = Order()
+    order1.addOrderItem(OrderItem(helmet, 1))
+    order1.addOrderItem(OrderItem(skatingShoe, 2))
+    orders.add(order1)
 
-  println("Adding items to order")
-  // Add new order items with products and quantity
-  shoppingCart?.addLineItem(OrderItem(product1, 2))
-  shoppingCart?.addLineItem(OrderItem(product2, 1))
+    val order2 = Order()
+    order2.addOrderItem(OrderItem(ankleProtector, 2))
+    orders.add(order2)
 
-  // Show order details. It will show order items.
-  shoppingCart?.show()
-  println("Number of Line Items: ${shoppingCart?.orderItems?.size}")
+    // TODO: Create a new shopping cart
+    val cart = ShoppingCart()
+    cart.addOrderItem(OrderItem(skatingGloves, 2))
 
-  // Delete order
-  println("\nCanceling Order ...")
-  // Setting Order object to null, which will be garbage collected and removed from memory
-  shoppingCart = null
+    // TODO: Add the shopping cart items to a new order
+    val order3 = Order()
+    order3.addOrderItem(cart.getOrderItems())
+    orders.add(order3)
 
-  // Show order details with OrderItems
-  println("\nCustomer exist: ${customer.name}")
-  println("Number of Line Items: ${if (shoppingCart?.orderItems?.size != null) shoppingCart.orderItems.size else 0}")
-  println("Does order exist?: ${if (shoppingCart != null) "Yes" else "No"}")
-  shoppingCart?.show()
+    // TODO: Clear items from your shopping cart
+    cart.clearItems()
+
+    println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

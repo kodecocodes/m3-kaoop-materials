@@ -38,89 +38,89 @@
  */
 
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 
-    fun getQuantity(): Int {
-        return quantity
-    }
+  fun getQuantity(): Int {
+    return quantity
+  }
 }
 
 class ShoppingCart {
-    // The order items live and die with the Order class.
-    // Example of Composition
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  // The order items live and die with the Order class.
+  // Example of Composition
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getOrderItems(): MutableList<OrderItem> {
-        return orderItems
-    }
+  fun getOrderItems(): MutableList<OrderItem> {
+    return orderItems
+  }
 
-    fun clearItems() {
-        orderItems.clear()
-    }
+  fun clearItems() {
+    orderItems.clear()
+  }
 }
 
 class Order {
-    // The order items live and die with the Order class.
-    // Example of Composition
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  // The order items live and die with the Order class.
+  // Example of Composition
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun addOrderItem(items: MutableList<OrderItem>) {
-        orderItems.addAll(items)
-    }
+  fun addOrderItem(items: MutableList<OrderItem>) {
+    orderItems.addAll(items)
+  }
 
-    fun getTotalCost(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalCost(): Double {
+    return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun getTotalNumberOfItems(): Int {
-        return orderItems.sumOf { it.getQuantity() }
-    }
+  fun getTotalNumberOfItems(): Int {
+    return orderItems.sumOf { it.getQuantity() }
+  }
 }
 
 fun main() {
-    val orders = mutableListOf<Order>()
+  val orders = mutableListOf<Order>()
 
-    // Create two products
-    val helmet = Product("Helmet", 1200.0)
-    val skatingShoe = Product("Smartphone", 800.0)
-    val ankleProtector = Product("AnkleProtector", 55.0)
-    val skatingGloves = Product("SkatingGloves", 12.0)
+  // Create two products
+  val helmet = Product("Helmet", 1200.0)
+  val skatingShoe = Product("Smartphone", 800.0)
+  val ankleProtector = Product("AnkleProtector", 55.0)
+  val skatingGloves = Product("SkatingGloves", 12.0)
 
-    // Existing orders containing three order items
-    val order1 = Order()
-    order1.addOrderItem(OrderItem(helmet, 1))
-    order1.addOrderItem(OrderItem(skatingShoe, 2))
-    orders.add(order1)
+  // Existing orders containing three order items
+  val order1 = Order()
+  order1.addOrderItem(OrderItem(helmet, 1))
+  order1.addOrderItem(OrderItem(skatingShoe, 2))
+  orders.add(order1)
 
-    val order2 = Order()
-    order2.addOrderItem(OrderItem(ankleProtector, 2))
-    orders.add(order2)
+  val order2 = Order()
+  order2.addOrderItem(OrderItem(ankleProtector, 2))
+  orders.add(order2)
 
-    // TODO: Create a new shopping cart
-    val cart = ShoppingCart()
-    cart.addOrderItem(OrderItem(skatingGloves, 2))
+  // TODO: Create a new shopping cart
+  val cart = ShoppingCart()
+  cart.addOrderItem(OrderItem(skatingGloves, 2))
 
-    // TODO: Add the shopping cart items to a new order
-    val order3 = Order()
-    order3.addOrderItem(cart.getOrderItems())
-    orders.add(order3)
+  // TODO: Add the shopping cart items to a new order
+  val order3 = Order()
+  order3.addOrderItem(cart.getOrderItems())
+  orders.add(order3)
 
-    // TODO: Clear items from your shopping cart
-    cart.clearItems()
+  // TODO: Clear items from your shopping cart
+  cart.clearItems()
 
-    println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
+  println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

@@ -51,35 +51,11 @@ class OrderItem(private val product: Product, private val quantity: Int) {
     }
 }
 
-class ShoppingCart {
-    // The order items live and die with the Order class.
-    // Example of Composition
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
-
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
-
-    fun getOrderItems(): MutableList<OrderItem> {
-        return orderItems
-    }
-
-    fun clearItems() {
-        orderItems.clear()
-    }
-}
-
 class Order {
-    // The order items live and die with the Order class.
-    // Example of Composition
     private val orderItems: MutableList<OrderItem> = mutableListOf()
 
     fun addOrderItem(orderItem: OrderItem) {
         orderItems.add(orderItem)
-    }
-
-    fun addOrderItem(items: MutableList<OrderItem>) {
-        orderItems.addAll(items)
     }
 
     fun getTotalCost(): Double {
@@ -96,31 +72,29 @@ fun main() {
 
     // Create two products
     val helmet = Product("Helmet", 1200.0)
-    val skatingShoe = Product("Smartphone", 800.0)
-    val ankleProtector = Product("AnkleProtector", 55.0)
-    val skatingGloves = Product("SkatingGloves", 12.0)
+    val skatingShoe = Product("Skating Shoe", 800.0)
+    val ankleProtector = Product("Ankle Protector", 55.0)
+    val skatingGloves = Product("Skating Glove", 12.0)
+    val warehouse = mapOf("helmet" to helmet, "skatingShoe" to skatingShoe, "ankleProtector" to ankleProtector, "skatingGloves" to skatingGloves)
 
     // Existing orders containing three order items
     val order1 = Order()
-    order1.addOrderItem(OrderItem(helmet, 1))
-    order1.addOrderItem(OrderItem(skatingShoe, 2))
+    order1.addOrderItem(OrderItem(warehouse.getValue("helmet"), 1))
+    order1.addOrderItem(OrderItem(warehouse.getValue("skatingShoe"), 2))
     orders.add(order1)
 
     val order2 = Order()
-    order2.addOrderItem(OrderItem(ankleProtector, 2))
+    order2.addOrderItem(OrderItem(warehouse.getValue("ankleProtector"), 2))
     orders.add(order2)
 
-    // TODO: Create a new shopping cart
-    val cart = ShoppingCart()
-    cart.addOrderItem(OrderItem(skatingGloves, 2))
-
-    // TODO: Add the shopping cart items to a new order
+    // TODO: Create a new order
     val order3 = Order()
-    order3.addOrderItem(cart.getOrderItems())
+    order3.addOrderItem(OrderItem(warehouse.getValue("skatingGloves"), 2))
     orders.add(order3)
 
-    // TODO: Clear items from your shopping cart
-    cart.clearItems()
+    // TODO: Remove order
+    orders.remove(order2)
 
+    println("There are ${warehouse.size} kinds of products in the warehouse.")
     println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

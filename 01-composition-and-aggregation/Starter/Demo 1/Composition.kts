@@ -74,8 +74,8 @@ fun main() {
 
     // Create two products
     val helmet = Product("Helmet", 1200.0)
-    val skatingShoe = Product("Smartphone", 800.0)
-    val ankleProtector = Product("AnkleProtector", 55.0)
+    val skatingShoe = Product("Skating Shoe", 800.0)
+    val ankleProtector = Product("Ankle Protector", 55.0)
 
     // Existing order containing two order items
     val order1 = Order()
@@ -83,9 +83,9 @@ fun main() {
     order1.addOrderItem(OrderItem(skatingShoe, 2))
     orders.add(order1)
 
-    // TODO: Create new order, add ankleProtector order item and add the order item to your total list of orders
+    // TODO: Create new order with ankleProtector
 
-    // TODO: Terminate order2
+    // TODO: Remove order
 
     println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

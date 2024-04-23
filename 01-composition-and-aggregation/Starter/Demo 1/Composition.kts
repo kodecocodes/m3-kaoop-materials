@@ -37,7 +37,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
  
- class Product(val name: String, val price: Double) {
+class Product(val name: String, val price: Double) {
     // Product details
 }
 

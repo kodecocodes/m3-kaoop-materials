@@ -70,7 +70,7 @@ class Order {
 fun main() {
     val orders = mutableListOf<Order>()
 
-    // Create two products
+    // Create products
     val helmet = Product("Helmet", 1200.0)
     val skatingShoe = Product("Skating Shoe", 800.0)
     val ankleProtector = Product("Ankle Protector", 55.0)
@@ -93,7 +93,7 @@ fun main() {
     orders.add(order3)
 
     // TODO: Remove order
-    orders.remove(order2)
+    orders.remove(order3)
 
     println("There are ${warehouse.size} kinds of products in the warehouse.")
     println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")

@@ -37,88 +37,78 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class Customer(val name: String) {
-  // Customer details
-}
-
 class Product(val name: String, val price: Double) {
-  // Product details
+    // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-  fun getLineItemPrice(): Double {
-    return product.price * quantity
-  }
-
-  fun show() {
-    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
-  }
+    fun getTotalItemCost(): Double {
+        return product.price * quantity
+    }
 }
 
-// The private constructor prevents unauthorized instantiation of the class
 class ShoppingCart private constructor() {
-  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-  // Companion object to hold the singleton instance
-  companion object {
-    // Keyword to make sure multiple threads read the most updated value of it
-    @Volatile
-    private var instance: ShoppingCart? = null
+    private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    // Function to get the singleton instance in thread safe way
-    fun getInstance(): ShoppingCart {
-      // Check that instance is initialized (without obtaining the lock, which is expensive).
-      // If it is initialized, return it immediately.
-      if (instance == null) {
-        // If no initialized, obtain the lock.
-        synchronized(this) {
-          // You need to double-check if the instance has already been initialized again, since
-          // if another thread acquired the lock first, it may have already done the initialization.
-          if (instance == null) {
-            // Initialize the instance
-            instance = ShoppingCart()
-          }
+    companion object {
+        val instance: ShoppingCart by lazy {
+            ShoppingCart()
         }
-      }
-      return instance as ShoppingCart
     }
-  }
 
-  fun addLineItem(orderItem: OrderItem) {
-    orderItems.add(orderItem)
-  }
-
-  private fun getTotalOrderPrice(): Double {
-    return orderItems.sumOf { it.getLineItemPrice() }
-  }
-
-  fun show() {
-    println()
-    println("Here are the details of the order:")
-    println("Total Price: $${getTotalOrderPrice()}")
-    println("Number of Line Items: ${orderItems.size}")
-    orderItems.forEach { orderItem: OrderItem ->
-      orderItem.show()
+    fun addOrderItem(orderItem: OrderItem) {
+        orderItems.add(orderItem)
     }
-  }
+
+    fun getTotalCostOfItems(): Double {
+        return orderItems.sumOf { it.getTotalItemCost() }
+    }
+
+    fun getDetails(): String {
+        return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
+    }
 }
 
-// TODO: Add classes for payment processing depending on customer choice of Credit Card or Paypal
+class ElectronicsShop {
+    val ps5 = Product("PS 5", 700.0)
+    val xBoxController = Product("X Box Controller", 20.0)
+
+    private val cart = ShoppingCart.instance
+
+    fun addItem(product: Product, quantity: Int) {
+        cart.addOrderItem(OrderItem(product, quantity))
+    }
+}
+
+class SportsShop {
+    val ankleProtector = Product("AnkleProtector", 55.0)
+    val skatingGloves = Product("SkatingGloves", 12.0)
+
+    private val cart = ShoppingCart.instance
+
+    fun addItem(product: Product, quantity: Int) {
+        cart.addOrderItem(OrderItem(product, quantity))
+    }
+}
+
+// TODO: Create a payment processor
+
 
 fun main() {
-  // Create a customer for which you will create orders
-  val customer = Customer("Elon Musk")
+    // Get an instance of the shopping cart
+    val cart = ShoppingCart.instance
 
-  // Create two products
-  val product1 = Product("Laptop", 1200.0)
-  val product2 = Product("Smartphone", 800.0)
+    val electronicsShop = ElectronicsShop()
+    electronicsShop.addItem(electronicsShop.ps5, 1)
+    electronicsShop.addItem(electronicsShop.xBoxController, 2)
 
-  // Create a shopping cart to add items
-  val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items with products and quantity
-  shoppingCart.addLineItem(OrderItem(product1, 2))
-  // Show order details. It will show order items.
-  shoppingCart.show()
+    val sportsShop = SportsShop()
+    sportsShop.addItem(sportsShop.skatingGloves, 2)
+    sportsShop.addItem(sportsShop.ankleProtector, 2)
 
-  // TODO: Add logic for payment processing to show factory pattern usage
+    println(cart.getDetails())
+
+    // TODO: Add payment option flag
+
 }

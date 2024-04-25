@@ -42,55 +42,59 @@ class Product(val name: String, val price: Double) {
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-  fun getLineItemPrice(): Double {
+  fun getTotalItemCost(): Double {
     return product.price * quantity
-  }
-
-  fun show() {
-    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
   }
 }
 
-// TODO: Convert this to a Singleton class
-class ShoppingCart() {
-  // The order items live and die with the Order class.
-  // Example of Composition
-  val orderItems: MutableList<OrderItem> = mutableListOf()
+class ShoppingCart {
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-  fun addLineItem(orderItem: OrderItem) {
+  // TODO: Create singleton instance
+  
+
+  fun addOrderItem(orderItem: OrderItem) {
     orderItems.add(orderItem)
   }
 
-  private fun getTotalOrderPrice(): Double {
-    return orderItems.sumOf { it.getLineItemPrice() }
+  fun getDetails(): String {
+    return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
   }
+}
 
-  fun show() {
-    println()
-    println("Here are the details of the order:")
-    println("Total Price: $${getTotalOrderPrice()}")
-    println("Number of Line Items: ${orderItems.size}")
-    orderItems.forEach { orderItem: OrderItem ->
-      orderItem.show()
-    }
+class ElectronicsShop {
+  val ps5 = Product("PS 5", 700.0)
+  val xBoxController = Product("X Box Controller", 20.0)
+
+  // TODO: Instantiate a shopping cart
+  private val cart = ShoppingCart()
+
+  fun addItem(product: Product, quantity: Int) {
+    cart.addOrderItem(OrderItem(product, quantity))
+  }
+}
+
+class SportsShop {
+  val ankleProtector = Product("AnkleProtector", 55.0)
+  val skatingGloves = Product("SkatingGloves", 12.0)
+
+  // TODO: Instantiate a shopping cart
+  private val cart = ShoppingCart()
+
+  fun addItem(product: Product, quantity: Int) {
+    cart.addOrderItem(OrderItem(product, quantity))
   }
 }
 
 fun main() {
-  // Create two products
-  val product1 = Product("Laptop", 1200.0)
-  val product2 = Product("Smartphone", 800.0)
+  // Get an instance of the shopping cart
+  val cart = ShoppingCart()
 
-  // Create a shopping cart to add items
-  var shoppingCart: ShoppingCart? = ShoppingCart()
-  println("Created an instance of cart...")
+  // TODO: Add items from the electronics shop
 
-  // Add new order items with products and quantity
-  shoppingCart?.addLineItem(OrderItem(product1, 2))
-  shoppingCart?.addLineItem(OrderItem(product2, 1))
 
-  // Show order details. It will show order items.
-  shoppingCart?.show()
+  // TODO: Add items from the sports shop
 
-  // TODO: Create another cart instance, and see the effect. Does it create multiple carts?
+
+  println(cart.getDetails())
 }

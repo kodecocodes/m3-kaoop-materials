@@ -37,92 +37,57 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-// TODO: Update class to react based on product availability change for notifying
-class Customer(val name: String) {
-  // Customer details
+class Product(name: String, var price: Double) {
 }
 
-// TODO: Update class to show observer pattern usage for product availability change
-class Product(val name: String, val price: Double) {
-  // Product details
+class OrderItem(private var product: Product, private var quantity: Int) {
+    fun getTotalItemCost(): Double {
+        return product.price * quantity
+    }
+
+    fun getProduct(): Product {
+        return product
+    }
+
+    fun product(updatedProduct: Product) {
+        product = updatedProduct
+    }
 }
 
-class OrderItem(private val product: Product, private val quantity: Int) {
-  fun getLineItemPrice(): Double {
-    return product.price * quantity
-  }
-
-  fun show() {
-    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
-  }
-}
-
-// The private constructor prevents unauthorized instantiation of the class
 class ShoppingCart private constructor() {
-  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-  // Companion object to hold the singleton instance
-  companion object {
-    // Keyword to make sure multiple threads read the most updated value of it
-    @Volatile
-    private var instance: ShoppingCart? = null
+    private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    // Function to get the singleton instance in thread safe way
-    fun getInstance(): ShoppingCart {
-      // Check that instance is initialized (without obtaining the lock, which is expensive).
-      // If it is initialized, return it immediately.
-      if (instance == null) {
-        // If no initialized, obtain the lock.
-        synchronized(this) {
-          // You need to double-check if the instance has already been initialized again, since
-          // if another thread acquired the lock first, it may have already done the initialization.
-          if (instance == null) {
-            // Initialize the instance
-            instance = ShoppingCart()
-          }
+    companion object {
+        val instance: ShoppingCart by lazy {
+            ShoppingCart()
         }
-      }
-      return instance as ShoppingCart
     }
-  }
 
-  fun addLineItem(orderItem: OrderItem) {
-    orderItems.add(orderItem)
-  }
-
-  private fun getTotalOrderPrice(): Double {
-    return orderItems.sumOf { it.getLineItemPrice() }
-  }
-
-  fun show() {
-    println()
-    println("Here are the details of the order:")
-    println("Total Price: $${getTotalOrderPrice()}")
-    println("Number of Line Items: ${orderItems.size}")
-    orderItems.forEach { orderItem: OrderItem ->
-      orderItem.show()
+    fun addOrderItem(orderItem: OrderItem) {
+        orderItems.add(orderItem)
     }
-  }
 
-  // TODO: Update class to react based on product availability change
+    fun getTotalCostOfItems(): Double {
+        return orderItems.sumOf { it.getTotalItemCost() }
+    }
 
+    fun getDetails(): String {
+        return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
+    }
 }
+
+// TODO: Create an Observer interface
+
 
 fun main() {
-  // Create a customer for which you will create orders
-  val customer = Customer("Elon Musk")
+    val cart = ShoppingCart.instance
 
-  // Create two products
-  val product1 = Product("Laptop", 1200.0)
-  val product2 = Product("Smartphone", 800.0)
+    val skatingGloves = Product("SkatingGloves", 12.0)
+    cart.addOrderItem(OrderItem(skatingGloves, 2))
 
-  // Create a shopping cart to add items
-  val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items with products and quantity
-  shoppingCart.addLineItem(OrderItem(product1, 2))
-  // Show order details. It will show order items.
-  shoppingCart.show()
+    // TODO: Update price of product
 
-  // TODO: Set listeners and show a demo of product availability change
 
+    println(cart.getDetails())
 }

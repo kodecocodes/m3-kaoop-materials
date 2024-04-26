@@ -41,16 +41,16 @@ class Product(name: String, price: Double) : IObservable {
   override val observers: ArrayList<IObserver> = ArrayList()
 
   var name = name
-      set(value) {
-          field = value
-          sendUpdateEvent(this)
-      }
+    set(value) {
+      field = value
+      sendUpdateEvent(this)
+    }
 
   var price = price
-      set(value) {
-          field = value
-          sendUpdateEvent(this)
-      }
+    set(value) {
+      field = value
+      sendUpdateEvent(this)
+    }
 }
 
 class OrderItem(private var product: Product, private var quantity: Int) {
@@ -71,26 +71,26 @@ class ShoppingCart private constructor() : IObserver {
   private val orderItems: MutableList<OrderItem> = mutableListOf()
 
   companion object {
-      val instance: ShoppingCart by lazy {
-          ShoppingCart()
-      }
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
+    }
   }
 
   fun addOrderItem(orderItem: OrderItem) {
-      orderItems.add(orderItem)
-      orderItem.getProduct().add(this)
+    orderItems.add(orderItem)
+    orderItem.getProduct().add(this)
   }
 
   fun getTotalCostOfItems(): Double {
-      return orderItems.sumOf { it.getTotalItemCost() }
+    return orderItems.sumOf { it.getTotalItemCost() }
   }
 
   fun getDetails(): String {
-      return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
+    return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
   }
 
   override fun update(product: Product) {
-      orderItems.find { it.getProduct() == product }?.product(product)
+    orderItems.find { it.getProduct() == product }?.product(product)
   }
 }
 
@@ -103,15 +103,15 @@ interface IObservable {
   val observers: ArrayList<IObserver>
 
   fun add(observer: IObserver) {
-      observers.add(observer)
+    observers.add(observer)
   }
 
   fun remove(observer: IObserver) {
-      observers.remove(observer)
+    observers.remove(observer)
   }
 
   fun sendUpdateEvent(product: Product) {
-      observers.forEach { it.update(product) }
+    observers.forEach { it.update(product) }
   }
 }
 

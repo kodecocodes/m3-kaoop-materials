@@ -51,7 +51,7 @@ class ShoppingCart {
   private val orderItems: MutableList<OrderItem> = mutableListOf()
 
   // TODO: Create singleton instance
-  
+
 
   fun addOrderItem(orderItem: OrderItem) {
     orderItems.add(orderItem)

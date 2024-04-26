@@ -37,57 +37,57 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class Product(name: String, var price: Double) {
+class Product(val name: String, val price: Double) {
 }
 
 class OrderItem(private var product: Product, private var quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 
-    fun getProduct(): Product {
-        return product
-    }
+  fun getProduct(): Product {
+    return product
+  }
 
-    fun product(updatedProduct: Product) {
-        product = updatedProduct
-    }
+  fun product(updatedProduct: Product) {
+    product = updatedProduct
+  }
 }
 
 class ShoppingCart private constructor() {
 
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    companion object {
-        val instance: ShoppingCart by lazy {
-            ShoppingCart()
-        }
+  companion object {
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
     }
+  }
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getTotalCostOfItems(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalCostOfItems(): Double {
+    return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun getDetails(): String {
-        return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
-    }
+  fun getDetails(): String {
+    return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
+  }
 }
 
 // TODO: Create an Observer interface
 
 
 fun main() {
-    val cart = ShoppingCart.instance
+  val cart = ShoppingCart.instance
 
-    val skatingGloves = Product("SkatingGloves", 12.0)
-    cart.addOrderItem(OrderItem(skatingGloves, 2))
+  val skatingGloves = Product("SkatingGloves", 12.0)
+  cart.addOrderItem(OrderItem(skatingGloves, 2))
 
-    // TODO: Update price of product
+  // TODO: Update price of product
 
 
-    println(cart.getDetails())
+  println(cart.getDetails())
 }

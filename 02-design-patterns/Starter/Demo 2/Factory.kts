@@ -38,77 +38,77 @@
  */
 
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 }
 
 class ShoppingCart private constructor() {
 
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    companion object {
-        val instance: ShoppingCart by lazy {
-            ShoppingCart()
-        }
+  companion object {
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
     }
+  }
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getTotalCostOfItems(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalCostOfItems(): Double {
+   return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun getDetails(): String {
-        return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
-    }
+  fun getDetails(): String {
+    return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
+  }
 }
 
 class ElectronicsShop {
-    val ps5 = Product("PS 5", 700.0)
-    val xBoxController = Product("X Box Controller", 20.0)
+  val ps5 = Product("PS 5", 700.0)
+  val xBoxController = Product("X Box Controller", 20.0)
 
-    private val cart = ShoppingCart.instance
+  private val cart = ShoppingCart.instance
 
-    fun addItem(product: Product, quantity: Int) {
-        cart.addOrderItem(OrderItem(product, quantity))
-    }
+  fun addItem(product: Product, quantity: Int) {
+    cart.addOrderItem(OrderItem(product, quantity))
+  }
 }
 
 class SportsShop {
-    val ankleProtector = Product("AnkleProtector", 55.0)
-    val skatingGloves = Product("SkatingGloves", 12.0)
+  val ankleProtector = Product("AnkleProtector", 55.0)
+  val skatingGloves = Product("SkatingGloves", 12.0)
 
-    private val cart = ShoppingCart.instance
+  private val cart = ShoppingCart.instance
 
-    fun addItem(product: Product, quantity: Int) {
-        cart.addOrderItem(OrderItem(product, quantity))
-    }
+  fun addItem(product: Product, quantity: Int) {
+    cart.addOrderItem(OrderItem(product, quantity))
+  }
 }
 
 // TODO: Create a payment processor
 
 
 fun main() {
-    // Get an instance of the shopping cart
-    val cart = ShoppingCart.instance
+  // Get an instance of the shopping cart
+  val cart = ShoppingCart.instance
 
-    val electronicsShop = ElectronicsShop()
-    electronicsShop.addItem(electronicsShop.ps5, 1)
-    electronicsShop.addItem(electronicsShop.xBoxController, 2)
+  val electronicsShop = ElectronicsShop()
+  electronicsShop.addItem(electronicsShop.ps5, 1)
+  electronicsShop.addItem(electronicsShop.xBoxController, 2)
 
-    val sportsShop = SportsShop()
-    sportsShop.addItem(sportsShop.skatingGloves, 2)
-    sportsShop.addItem(sportsShop.ankleProtector, 2)
+  val sportsShop = SportsShop()
+  sportsShop.addItem(sportsShop.skatingGloves, 2)
+  sportsShop.addItem(sportsShop.ankleProtector, 2)
 
-    println(cart.getDetails())
+  println(cart.getDetails())
 
-    // TODO: Add payment option flag
+  // TODO: Add payment option flag
 
 }

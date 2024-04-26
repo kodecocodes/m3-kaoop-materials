@@ -42,119 +42,119 @@ class Product(val name: String, val price: Double) {
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 }
 
 class ShoppingCart private constructor() {
 
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    companion object {
-        val instance: ShoppingCart by lazy {
-            ShoppingCart()
-        }
+  companion object {
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
     }
+  }
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getTotalCostOfItems(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalCostOfItems(): Double {
+    return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun getDetails(): String {
-        return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
-    }
+  fun getDetails(): String {
+    return "- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}"
+  }
 }
 
 class ElectronicsShop {
-    val ps5 = Product("PS 5", 700.0)
-    val xBoxController = Product("X Box Controller", 20.0)
+  val ps5 = Product("PS 5", 700.0)
+  val xBoxController = Product("X Box Controller", 20.0)
 
-    private val cart = ShoppingCart.instance
+  private val cart = ShoppingCart.instance
 
-    fun addItem(product: Product, quantity: Int) {
-        cart.addOrderItem(OrderItem(product, quantity))
-    }
+  fun addItem(product: Product, quantity: Int) {
+    cart.addOrderItem(OrderItem(product, quantity))
+  }
 }
 
 class SportsShop {
-    val ankleProtector = Product("AnkleProtector", 55.0)
-    val skatingGloves = Product("SkatingGloves", 12.0)
+  val ankleProtector = Product("AnkleProtector", 55.0)
+  val skatingGloves = Product("SkatingGloves", 12.0)
 
-    private val cart = ShoppingCart.instance
+  private val cart = ShoppingCart.instance
 
-    fun addItem(product: Product, quantity: Int) {
-        cart.addOrderItem(OrderItem(product, quantity))
-    }
+  fun addItem(product: Product, quantity: Int) {
+    cart.addOrderItem(OrderItem(product, quantity))
+  }
 }
 
 // TODO: Create a payment processor
 interface PaymentProcessor {
-    fun processPayment(amount: Double)
+  fun processPayment(amount: Double)
 }
 
 // Concrete implementation of PaymentProcessor
 class CreditCardProcessor : PaymentProcessor {
-    override fun processPayment(amount: Double) {
-        println("Processing credit card payment of $$amount.")
-        // Additional logic specific to credit card processing
-    }
+  override fun processPayment(amount: Double) {
+    println("Processing credit card payment of $$amount.")
+    // Additional logic specific to credit card processing
+  }
 }
 
 // Another concrete implementation of PaymentProcessor
 class PayPalProcessor : PaymentProcessor {
-    override fun processPayment(amount: Double) {
-        println("Processing PayPal payment of $$amount.")
-        // Additional logic specific to PayPal processing
-    }
+  override fun processPayment(amount: Double) {
+    println("Processing PayPal payment of $$amount.")
+    // Additional logic specific to PayPal processing
+  }
 }
 
 interface PaymentProcessorFactory {
-    fun createPaymentProcessor(): PaymentProcessor
+  fun createPaymentProcessor(): PaymentProcessor
 }
 
 // Concrete implementation of PaymentProcessorFactory for Credit Card
 class CreditCardProcessorFactory : PaymentProcessorFactory {
-    override fun createPaymentProcessor(): PaymentProcessor {
-        return CreditCardProcessor()
-    }
+  override fun createPaymentProcessor(): PaymentProcessor {
+    return CreditCardProcessor()
+  }
 }
 
 // Concrete implementation of PaymentProcessorFactory for PayPal
 class PayPalProcessorFactory : PaymentProcessorFactory {
-    override fun createPaymentProcessor(): PaymentProcessor {
-        return PayPalProcessor()
-    }
+  override fun createPaymentProcessor(): PaymentProcessor {
+    return PayPalProcessor()
+  }
 }
 
 fun main() {
-    // Get an instance of the shopping cart
-    val cart = ShoppingCart.instance
+  // Get an instance of the shopping cart
+  val cart = ShoppingCart.instance
 
-    val electronicsShop = ElectronicsShop()
-    electronicsShop.addItem(electronicsShop.ps5, 1)
-    electronicsShop.addItem(electronicsShop.xBoxController, 2)
+  val electronicsShop = ElectronicsShop()
+  electronicsShop.addItem(electronicsShop.ps5, 1)
+  electronicsShop.addItem(electronicsShop.xBoxController, 2)
 
-    val sportsShop = SportsShop()
-    sportsShop.addItem(sportsShop.skatingGloves, 2)
-    sportsShop.addItem(sportsShop.ankleProtector, 2)
+  val sportsShop = SportsShop()
+  sportsShop.addItem(sportsShop.skatingGloves, 2)
+  sportsShop.addItem(sportsShop.ankleProtector, 2)
 
-    println(cart.getDetails())
+  println(cart.getDetails())
 
-    // TODO: Add payment option flag
-    val customerPayingWithCC = true
+  // TODO: Add payment option flag
+  val customerPayingWithCC = true
 
-    // Customer wants to use CC
-    val paymentProcessorFactory = if (customerPayingWithCC) {
-        CreditCardProcessorFactory()
-    } else {
-        PayPalProcessorFactory()
-    }
+  // Customer wants to use CC
+  val paymentProcessorFactory = if (customerPayingWithCC) {
+    CreditCardProcessorFactory()
+  } else {
+    PayPalProcessorFactory()
+  }
 
-    val paymentProcessor: PaymentProcessor = paymentProcessorFactory.createPaymentProcessor()
-    paymentProcessor.processPayment(cart.getTotalCostOfItems())
+  val paymentProcessor: PaymentProcessor = paymentProcessorFactory.createPaymentProcessor()
+  paymentProcessor.processPayment(cart.getTotalCostOfItems())
 }

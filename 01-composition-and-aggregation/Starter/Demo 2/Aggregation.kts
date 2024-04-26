@@ -38,61 +38,66 @@
  */
 
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 
-    fun getQuantity(): Int {
-        return quantity
-    }
+  fun getQuantity(): Int {
+    return quantity
+  }
 }
 
 class Order {
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getTotalCost(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalCost(): Double {
+    return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun getTotalNumberOfItems(): Int {
-        return orderItems.sumOf { it.getQuantity() }
-    }
+  fun getTotalNumberOfItems(): Int {
+    return orderItems.sumOf { it.getQuantity() }
+  }
 }
 
 fun main() {
-    val orders = mutableListOf<Order>()
+  val orders = mutableListOf<Order>()
 
-    // Create products
-    val helmet = Product("Helmet", 1200.0)
-    val skatingShoe = Product("Skating Shoe", 800.0)
-    val ankleProtector = Product("Ankle Protector", 55.0)
-    val skatingGloves = Product("Skating Glove", 12.0)
-    val warehouse = mapOf("helmet" to helmet, "skatingShoe" to skatingShoe, "ankleProtector" to ankleProtector, "skatingGloves" to skatingGloves)
+  // Create products
+  val helmet = Product("Helmet", 1200.0)
+  val skatingShoe = Product("Skating Shoe", 800.0)
+  val ankleProtector = Product("Ankle Protector", 55.0)
+  val skatingGloves = Product("Skating Glove", 12.0)
+  val warehouse = mapOf(
+    "helmet" to helmet,
+    "skatingShoe" to skatingShoe,
+    "ankleProtector" to ankleProtector,
+    "skatingGloves" to skatingGloves
+  )
 
-    // Existing orders containing three order items
-    val order1 = Order()
-    order1.addOrderItem(OrderItem(helmet, 1))
-    order1.addOrderItem(OrderItem(skatingShoe, 2))
-    orders.add(order1)
+  // Existing orders containing three order items
+  val order1 = Order()
+  order1.addOrderItem(OrderItem(helmet, 1))
+  order1.addOrderItem(OrderItem(skatingShoe, 2))
+  orders.add(order1)
 
-    val order2 = Order()
-    order2.addOrderItem(OrderItem(ankleProtector, 2))
-    orders.add(order2)
+  val order2 = Order()
+  order2.addOrderItem(OrderItem(ankleProtector, 2))
+  orders.add(order2)
 
-    // TODO: Create a new order
-    
+  // TODO: Create a new order
 
-    // TODO: Remove order
-    
 
-    println("There are ${warehouse.size} kinds of products in the warehouse.")
-    println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
+  // TODO: Remove order
+
+
+  println("There are ${warehouse.size} kinds of products in the warehouse.")
+  println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

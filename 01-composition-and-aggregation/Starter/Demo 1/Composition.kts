@@ -36,56 +36,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
- 
+
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 
-    fun getQuantity(): Int {
-        return quantity
-    }
+  fun getQuantity(): Int {
+    return quantity
+  }
 }
 
 class Order() {
-    // The order items live and die with the Order class.
-    // Example of Composition
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  // The order items live and die with the Order class.
+  // Example of Composition
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getTotalCost(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalCost(): Double {
+    return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun getTotalNumberOfItems(): Int {
-        return orderItems.sumOf { it.getQuantity() }
-    }
+  fun getTotalNumberOfItems(): Int {
+    return orderItems.sumOf { it.getQuantity() }
+  }
 }
 
 fun main() {
-    val orders = mutableListOf<Order>()
+  val orders = mutableListOf<Order>()
 
-    // Create two products
-    val helmet = Product("Helmet", 1200.0)
-    val skatingShoe = Product("Skating Shoe", 800.0)
-    val ankleProtector = Product("Ankle Protector", 55.0)
+  // Create two products
+  val helmet = Product("Helmet", 1200.0)
+  val skatingShoe = Product("Skating Shoe", 800.0)
+  val ankleProtector = Product("Ankle Protector", 55.0)
 
-    // Existing order containing two order items
-    val order1 = Order()
-    order1.addOrderItem(OrderItem(helmet, 1))
-    order1.addOrderItem(OrderItem(skatingShoe, 2))
-    orders.add(order1)
+  // Existing order containing two order items
+  val order1 = Order()
+  order1.addOrderItem(OrderItem(helmet, 1))
+  order1.addOrderItem(OrderItem(skatingShoe, 2))
+  orders.add(order1)
 
-    // TODO: Create new order with ankleProtector
+  // TODO: Create new order with ankleProtector
 
-    // TODO: Remove order
+  // TODO: Remove order
 
-    println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
+  println("- You have ${orders.size} order(s), containing ${orders.sumOf { it.getTotalNumberOfItems() }} items, at the cost of \$${orders.sumOf { it.getTotalCost() }}")
 }

@@ -36,94 +36,94 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
- 
+
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 }
 
 class ShoppingCart private constructor() {
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    companion object {
-        val instance: ShoppingCart by lazy {
-            ShoppingCart()
-        }
+  companion object {
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
     }
+  }
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun show() {
-        println("- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}")
-    }
+  fun show() {
+    println("- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}")
+  }
 }
 
 // TODO: Fix the violation
 interface PaymentGateway {
-    fun processPayment(shoppingCart: ShoppingCart): Boolean
+  fun processPayment(shoppingCart: ShoppingCart): Boolean
 }
 
 class CheckoutService(private val paymentGateway: PaymentGateway) {
-    fun processOrderPayment(shoppingCart: ShoppingCart) {
-        val paymentResult = paymentGateway.processPayment(shoppingCart)
+  fun processOrderPayment(shoppingCart: ShoppingCart) {
+    val paymentResult = paymentGateway.processPayment(shoppingCart)
 
-        if (paymentResult) {
-            println("Payment successful. Order has been processed.")
-        } else {
-            println("Payment failed for order.")
-        }
+    if (paymentResult) {
+      println("Payment successful. Order has been processed.")
+    } else {
+      println("Payment failed for order.")
     }
+  }
 }
 
 class StripePaymentGateway : PaymentGateway {
-    override fun processPayment(shoppingCart: ShoppingCart): Boolean {
-        // Logic to process payment using Stripe
-        println("Processing payment using Stripe.")
-        // Actual payment processing logic with Stripe API would go here
-        return true
-    }
+  override fun processPayment(shoppingCart: ShoppingCart): Boolean {
+    // Logic to process payment using Stripe
+    println("Processing payment using Stripe.")
+    // Actual payment processing logic with Stripe API would go here
+    return true
+  }
 }
 
 class PaypalPaymentGateway : PaymentGateway {
-    override fun processPayment(shoppingCart: ShoppingCart): Boolean {
-        // Logic to process payment using Paypal
-        println("Processing payment using Paypal.")
-        // Actual payment processing logic with Paypal API would go here
-        return true
-    }
+  override fun processPayment(shoppingCart: ShoppingCart): Boolean {
+    // Logic to process payment using Paypal
+    println("Processing payment using Paypal.")
+    // Actual payment processing logic with Paypal API would go here
+    return true
+  }
 }
 
 enum class PaymentGatewayType {
-    STRIPE,
-    PAYPAL
+  STRIPE,
+  PAYPAL
 }
 
 fun main() {
-    // Create products
-    val product1 = Product("Laptop", 1200.0)
-    val product2 = Product("Smartphone", 800.0)
+  // Create products
+  val product1 = Product("Laptop", 1200.0)
+  val product2 = Product("Smartphone", 800.0)
 
-    // Create a shopping cart to add items
-    val shoppingCart: ShoppingCart = ShoppingCart.instance
-    shoppingCart.addOrderItem(OrderItem(product1, 1))
-    shoppingCart.addOrderItem(OrderItem(product2, 1))
+  // Create a shopping cart to add items
+  val shoppingCart: ShoppingCart = ShoppingCart.instance
+  shoppingCart.addOrderItem(OrderItem(product1, 1))
+  shoppingCart.addOrderItem(OrderItem(product2, 1))
 
-    val selectedGateway = PaymentGatewayType.PAYPAL
+  val selectedGateway = PaymentGatewayType.PAYPAL
 
-    // Creating an instance of the selected payment gateway
-    val paymentGateway = when (selectedGateway) {
-        PaymentGatewayType.STRIPE -> StripePaymentGateway()
-        PaymentGatewayType.PAYPAL -> PaypalPaymentGateway()
-    }
+  // Creating an instance of the selected payment gateway
+  val paymentGateway = when (selectedGateway) {
+    PaymentGatewayType.STRIPE -> StripePaymentGateway()
+    PaymentGatewayType.PAYPAL -> PaypalPaymentGateway()
+  }
 
-    // Using the CheckoutService with the selected payment gateway
-    val checkoutService = CheckoutService(paymentGateway)
-    checkoutService.processOrderPayment(shoppingCart)
+  // Using the CheckoutService with the selected payment gateway
+  val checkoutService = CheckoutService(paymentGateway)
+  checkoutService.processOrderPayment(shoppingCart)
 }

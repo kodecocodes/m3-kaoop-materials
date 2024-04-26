@@ -38,35 +38,35 @@
  */
 
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 }
 
 class ShoppingCart private constructor() {
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    companion object {
-        val instance: ShoppingCart by lazy {
-            ShoppingCart()
-        }
+  companion object {
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
     }
+  }
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun getTotalOrderPrice(): Double {
-        return orderItems.sumOf { it.getTotalItemCost() }
-    }
+  fun getTotalOrderPrice(): Double {
+    return orderItems.sumOf { it.getTotalItemCost() }
+  }
 
-    fun show() {
-        println("- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}")
-    }
+  fun show() {
+    println("- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}")
+  }
 }
 
 // TODO: Fix this class breaking the SRP principle
@@ -75,55 +75,55 @@ class ShoppingCart private constructor() {
 // The class has multiple reasons to change, making it harder to maintain and test.
 // It violates the Single Responsibility Principle, leading to tight coupling and decreased flexibility.
 class OrderService {
-    fun createOrder(shoppingCart: ShoppingCart) {
-        // Business logic for creating an order
-        println("Order created.")
+  fun createOrder(shoppingCart: ShoppingCart) {
+    // Business logic for creating an order
+    println("Order created.")
 
-        // Payment processing
-        if (processPayment(shoppingCart.getTotalOrderPrice())) {
-            println("Payment successful.")
+    // Payment processing
+    if (processPayment(shoppingCart.getTotalOrderPrice())) {
+      println("Payment successful.")
 
-            // Invoice generation
-            generateInvoice()
+      // Invoice generation
+      generateInvoice()
 
-            // Notification
-            sendConfirmationEmail()
-        } else {
-            println("Payment failed.")
-        }
+      // Notification
+      sendConfirmationEmail()
+    } else {
+      println("Payment failed.")
     }
+  }
 
-    private fun processPayment(amount: Double): Boolean {
-        // Logic to process credit card payment
-        println("Credit card payment was processed with a total amount of $$amount.")
-        return true
-    }
+  private fun processPayment(amount: Double): Boolean {
+    // Logic to process credit card payment
+    println("Credit card payment was processed with a total amount of $$amount.")
+    return true
+  }
 
-    private fun generateInvoice() {
-        // Logic to generate invoice
-        println("Invoice generated...")
-    }
+  private fun generateInvoice() {
+    // Logic to generate invoice
+    println("Invoice generated...")
+  }
 
-    private fun sendConfirmationEmail() {
-        // Logic to send confirmation email
-        println("Email sent: Order confirmed.")
-    }
+  private fun sendConfirmationEmail() {
+    // Logic to send confirmation email
+    println("Email sent: Order confirmed.")
+  }
 }
 
 fun main() {
-    // Create products
-    val product1 = Product("Laptop", 1200.0)
-    val product2 = Product("Smartphone", 800.0)
+  // Create products
+  val product1 = Product("Laptop", 1200.0)
+  val product2 = Product("Smartphone", 800.0)
 
-    // Create a shopping cart to add items
-    val shoppingCart: ShoppingCart = ShoppingCart.instance
-    shoppingCart.addOrderItem(OrderItem(product1, 1))
-    shoppingCart.addOrderItem(OrderItem(product2, 1))
-    shoppingCart.show()
+  // Create a shopping cart to add items
+  val shoppingCart: ShoppingCart = ShoppingCart.instance
+  shoppingCart.addOrderItem(OrderItem(product1, 1))
+  shoppingCart.addOrderItem(OrderItem(product2, 1))
+  shoppingCart.show()
 
-    // Creating instances of individual services
+  // Creating instances of individual services
 
-    // Creating an OrderService with the individual services
-    val orderService = OrderService()
-    orderService.createOrder(shoppingCart)
+  // Creating an OrderService with the individual services
+  val orderService = OrderService()
+  orderService.createOrder(shoppingCart)
 }

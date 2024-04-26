@@ -38,69 +38,69 @@
  */
 
 class Product(val name: String, val price: Double) {
-    // Product details
+  // Product details
 }
 
 class OrderItem(private val product: Product, private val quantity: Int) {
-    fun getTotalItemCost(): Double {
-        return product.price * quantity
-    }
+  fun getTotalItemCost(): Double {
+    return product.price * quantity
+  }
 }
 
 class ShoppingCart private constructor() {
-    private val orderItems: MutableList<OrderItem> = mutableListOf()
+  private val orderItems: MutableList<OrderItem> = mutableListOf()
 
-    companion object {
-        val instance: ShoppingCart by lazy {
-            ShoppingCart()
-        }
+  companion object {
+    val instance: ShoppingCart by lazy {
+      ShoppingCart()
     }
+  }
 
-    fun addOrderItem(orderItem: OrderItem) {
-        orderItems.add(orderItem)
-    }
+  fun addOrderItem(orderItem: OrderItem) {
+    orderItems.add(orderItem)
+  }
 
-    fun show() {
-        println("- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}")
-    }
+  fun show() {
+    println("- You have ${orderItems.size} order items, at the cost of \$${orderItems.sumOf { it.getTotalItemCost() }}")
+  }
 }
 
 // TODO: Fix the violation
 
 
 class CheckoutService {
-    fun processOrderPayment(shoppingCart: ShoppingCart) {
-        // Tightly coupled to a specific payment gateway (Stripe)
-        val stripePaymentGateway = StripePaymentGateway()
-        val paymentResult = stripePaymentGateway.processPayment(shoppingCart)
+  fun processOrderPayment(shoppingCart: ShoppingCart) {
+    // Tightly coupled to a specific payment gateway (Stripe)
+    val stripePaymentGateway = StripePaymentGateway()
+    val paymentResult = stripePaymentGateway.processPayment(shoppingCart)
 
-        if (paymentResult) {
-            println("Payment successful. Order has been processed.")
-        } else {
-            println("Payment failed.")
-        }
+    if (paymentResult) {
+      println("Payment successful. Order has been processed.")
+    } else {
+      println("Payment failed.")
     }
+  }
 }
 
 class StripePaymentGateway {
-    fun processPayment(shoppingCart: ShoppingCart): Boolean {
-        // Logic to process payment using Stripe
-        println("Processing payment using Stripe.")
-        // Actual payment processing logic with Stripe API would go here
-        return true
-    }
+  fun processPayment(shoppingCart: ShoppingCart): Boolean {
+    // Logic to process payment using Stripe
+    println("Processing payment using Stripe.")
+    // Actual payment processing logic with Stripe API would go here
+    return true
+  }
 }
 
 fun main() {
-    // Create products
-    val product1 = Product("Laptop", 1200.0)
-    val product2 = Product("Smartphone", 800.0)
+  // Create products
+  val product1 = Product("Laptop", 1200.0)
+  val product2 = Product("Smartphone", 800.0)
 
-    // Create a shopping cart to add items
-    val shoppingCart: ShoppingCart = ShoppingCart.instance
-    shoppingCart.addOrderItem(OrderItem(product1, 1))
-    shoppingCart.addOrderItem(OrderItem(product2, 1))
+  // Create a shopping cart to add items
+  val shoppingCart: ShoppingCart = ShoppingCart.instance
+  shoppingCart.addOrderItem(OrderItem(product1, 1))
+  shoppingCart.addOrderItem(OrderItem(product2, 1))
 
-    val checkoutService = CheckoutService()
-    checkoutService.processOrderPayment(shoppingCart)
+  val checkoutService = CheckoutService()
+  checkoutService.processOrderPayment(shoppingCart)
 }

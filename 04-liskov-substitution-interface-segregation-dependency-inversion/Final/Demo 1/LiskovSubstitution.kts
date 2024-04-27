@@ -37,122 +37,91 @@
  * DEALINGS IN THE SOFTWARE.
  */
 
-class Customer(val name: String) {
-  // Customer details
+interface IPaymentMode {
+  fun validate()
+
+  fun handlePayment()
 }
 
-class Product(val name: String, val price: Double) {
-  // Product details
-}
+internal abstract class BaseCard : IPaymentMode {
+  abstract override fun validate()
 
-class OrderItem(private val product: Product, private val quantity: Int) {
-  fun getLineItemPrice(): Double {
-    return product.price * quantity
+  override fun handlePayment(){
+    runFraudChecks()
   }
 
-  fun show() {
-    println("- Line Item \n Name: ${product.name}, quantity: $quantity, price: ${getLineItemPrice()}")
+  abstract fun runFraudChecks()
+}
+
+internal class CreditCard : BaseCard() {
+  override fun validate() {
+    println("Validating credit card ...")
+  }
+
+  override fun runFraudChecks() {
+    println("Running fraud checks on credit card ...")
+  }
+
+  override fun handlePayment() {
+    super.handlePayment()
+    println("Handling credit card payment ...")
   }
 }
 
-// The private constructor prevents unauthorized instantiation of the class
-class ShoppingCart private constructor() {
-  private val orderItems: MutableList<OrderItem> = mutableListOf()
+internal class DebitCard : BaseCard() {
+  override fun validate() {
+    println("Validating debit card ...")
+  }
 
-  // Companion object to hold the singleton instance
-  companion object {
-    // Keyword to make sure multiple threads read the most updated value of it
-    @Volatile
-    private var instance: ShoppingCart? = null
+  override fun runFraudChecks() {
+    println("Running fraud checks on debit card ...")
+  }
 
-    // Function to get the singleton instance in thread safe way
-    fun getInstance(): ShoppingCart {
-      // Check that instance is initialized (without obtaining the lock, which is expensive).
-      // If it is initialized, return it immediately.
-      if (instance == null) {
-        // If no initialized, obtain the lock.
-        synchronized(this) {
-          // You need to double-check if the instance has already been initialized again, since
-          // if another thread acquired the lock first, it may have already done the initialization.
-          if (instance == null) {
-            // Initialize the instance
-            instance = ShoppingCart()
-          }
-        }
-      }
-      return instance as ShoppingCart
+  override fun handlePayment() {
+    super.handlePayment()
+    println("Handling debit card payment ...")
+  }
+}
+
+internal class RewardsCard : IPaymentMode {
+  override fun validate() {
+    println("Validating rewards card ...")
+  }
+
+  override fun handlePayment() {
+    println("Handling rewards card payment ...")
+  }
+}
+
+class PaymentProcessor {
+  fun process(orderDetails: OrderDetails, paymentMode: IPaymentMode) {
+    try {
+      paymentMode.validate()
+      paymentMode.handlePayment()
+      saveToDatabase(orderDetails, paymentMode)
+    } catch (e: Exception) {
+      // Exception handling with specific exception type
     }
   }
 
-  fun addLineItem(orderItem: OrderItem) {
-    orderItems.add(orderItem)
-  }
-
-  fun getTotalOrderPrice(): Double {
-    return orderItems.sumOf { it.getLineItemPrice() }
-  }
-
-  fun show() {
-    println()
-    println("Here are the details of the order:")
-    println("Total Price: $${getTotalOrderPrice()}")
-    println("Number of Line Items: ${orderItems.size}")
-    orderItems.forEach { orderItem: OrderItem ->
-      orderItem.show()
-    }
+  private fun saveToDatabase(orderDetails: OrderDetails, paymentMode: IPaymentMode) {
+    println("Saving payment details to database ...")
   }
 }
 
-// Adhering to Liskov Substitution Principle
-interface PaymentGateway {
-  fun processPayment(customer: Customer, shoppingCart: ShoppingCart): Boolean
-}
-
-class GenericPaymentGateway : PaymentGateway {
-  override fun processPayment(customer: Customer, shoppingCart: ShoppingCart): Boolean {
-    // Logic to process a generic payment
-    println("Generic Processing Logic... ")
-    val isSuccessful = true
-    return isSuccessful
-  }
-}
-
-class CryptoPaymentGateway : PaymentGateway {
-  override fun processPayment(customer: Customer, shoppingCart: ShoppingCart): Boolean {
-    // Other generic logic for payment processing, validating enough funds etc.
-    println("Crypto steps for processing ${customer.name}'s order.")
-    // Logic to process crypto specific things
-    val isSuccessful = true
-    return isSuccessful
-  }
-}
-
+class OrderDetails {}
 
 fun main() {
-  // Create a customer for which you will create orders
-  val customer = Customer("Elon Musk")
+  val paymentProcessor = PaymentProcessor()
+  val debitCard = DebitCard()
+  val creditCard = CreditCard()
 
-  // Create two products
-  val product1 = Product("Laptop", 1200.0)
-  val product2 = Product("Smartphone", 800.0)
-
-  // Create a shopping cart to add items
-  val shoppingCart: ShoppingCart = ShoppingCart.getInstance()
-  // Add new order items with products and quantity
-  shoppingCart.addLineItem(OrderItem(product1, 2))
-  // Show order details. It will show order items.
-  shoppingCart.show()
-
-  // Using PaymentGateway interface instead of specific classes
-  val cryptoPaymentGateway: PaymentGateway = CryptoPaymentGateway()
-  val genericPaymentGateway: PaymentGateway = GenericPaymentGateway()
-
-  // You replace subclass where base class is expected
-  // Objects of CryptoPaymentGateway and GenericPaymentGateway can be used interchangeably where
-  // PaymentGateway is expected.
-  val paymentResult1 = cryptoPaymentGateway.processPayment(customer, shoppingCart)
-  println("Payment result (Crypto): $paymentResult1")
-
-  val paymentResult2 = genericPaymentGateway.processPayment(customer, shoppingCart)
-  println("Payment result (Generic): $paymentResult2")
+  val orderDetails = OrderDetails()
+  paymentProcessor.process(orderDetails, debitCard)
+  println()
+  paymentProcessor.process(orderDetails, creditCard)
+  println()
+  // TODO: Add new Reward card
+  val rewardsCard = RewardsCard()
+  paymentProcessor.process(orderDetails, rewardsCard)
 }

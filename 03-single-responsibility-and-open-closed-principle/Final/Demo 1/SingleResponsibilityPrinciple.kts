@@ -109,7 +109,7 @@ class CreditCardPaymentService : PaymentService {
 class InvoiceGenerationService : InvoiceService {
   override fun generateInvoice(shoppingCart: ShoppingCart) {
     // Logic to generate invoice
-    println("Invoice generated...")
+    println("Invoice generated successfully...")
   }
 }
 

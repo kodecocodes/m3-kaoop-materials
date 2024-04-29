@@ -85,6 +85,8 @@ fun main() {
   parentAccount.viewCart()
   parentAccount.addToCart(product1)
   parentAccount.viewCart()
+  // TODO: Uncomment manage payment settings behavior
+  // parentAccount.managePaymentSettings()
   println()
   
   kidsAccount.viewCart()

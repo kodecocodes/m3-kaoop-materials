@@ -39,7 +39,6 @@
 
 interface ProductsViewable {
   fun viewProducts()
-  fun managePaymentSettings()
 }
 
 interface CartViewable {
@@ -83,10 +82,6 @@ class KidsAccount : ProductsViewable, CartViewable, CartAddable {
 
   override fun viewCart() {
     println("Kids account viewing cart...")
-  }
-
-  override fun managePaymentSettings() {
-    println("Kids account managePaymentSettings...")
   }
 }
 

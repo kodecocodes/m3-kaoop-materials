@@ -95,13 +95,13 @@ fun main() {
   val parentAccount = ParentAccount()
   val kidsAccount = KidsAccount()
 
-  parentAccount.viewCart()
+  parentAccount.viewProducts()
   parentAccount.addToCart(product1)
   parentAccount.viewCart()
   parentAccount.managePaymentSettings()
   println()
 
-  kidsAccount.viewCart()
+  kidsAccount.viewProducts()
   kidsAccount.addToCart(product1)
   kidsAccount.viewCart()
 }

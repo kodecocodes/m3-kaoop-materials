@@ -93,7 +93,7 @@ class StripePaymentGateway : PaymentGateway {
 
 class PaypalPaymentGateway : PaymentGateway {
   override fun processPayment(shoppingCart: ShoppingCart): Boolean {
-    // Logic to process payment using Paypal
+    // Logic to process payment using PayPal
     println("Processing payment using Paypal.")
     // Actual payment processing logic with Paypal API would go here
     return true
